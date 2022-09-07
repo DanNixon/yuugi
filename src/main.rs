@@ -45,7 +45,7 @@ struct Cli {
     average_die_power: f64,
 }
 
-fn get_process_jiffys(pid: &Pid) -> u64 {
+fn get_process_jiffies(pid: &Pid) -> u64 {
     match fs::read_to_string(format!("/proc/{}/stat", pid)) {
         Ok(contents) => {
             let contents: Vec<&str> = contents.split(' ').collect();
@@ -93,8 +93,8 @@ async fn main() {
     let cpu_time = Family::<Labels, Counter>::default();
     let energy = Family::<Labels, Counter>::default();
 
-    let clk_tcl = sysconf::raw::sysconf(sysconf::raw::SysconfVariable::ScClkTck).unwrap();
-    let jiffy_in_seconds = 1.0 / (clk_tcl as f64);
+    let clk_tck = sysconf::raw::sysconf(sysconf::raw::SysconfVariable::ScClkTck).unwrap();
+    let jiffy_in_seconds = 1.0 / (clk_tck as f64);
     log::info!("1 jiffy is {} seconds", jiffy_in_seconds);
 
     {
@@ -173,7 +173,7 @@ async fn main() {
                 pid: pid.to_string(),
             };
 
-            let run_time = (get_process_jiffys(pid) as f64) * jiffy_in_seconds;
+            let run_time = (get_process_jiffies(pid) as f64) * jiffy_in_seconds;
             log::trace!("PID {} total CPU time = {}", pid, run_time);
 
             // TODO: this is dropping sub second precision
