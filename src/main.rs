@@ -64,6 +64,7 @@ fn get_process_jiffys(pid: &Pid) -> u64 {
 #[derive(Clone, Hash, PartialEq, Eq, Encode)]
 struct Labels {
     process_name: String,
+    cmdline: String,
     pid: String,
 }
 
@@ -168,6 +169,7 @@ async fn main() {
         for (pid, process) in sys.processes() {
             let labels = Labels {
                 process_name: process.name().to_string(),
+                cmdline: process.cmd().join(" "),
                 pid: pid.to_string(),
             };
 
