@@ -182,7 +182,7 @@ async fn main() {
                 .inner()
                 .store(run_time as u64, Ordering::Relaxed);
 
-            let e = (run_time * average_die_power) / 3600.0;
+            let e = (run_time * average_core_power) / 3600.0;
 
             // TODO: this is dropping sub Wh precision
             energy
