@@ -1,4 +1,4 @@
-# yuugi [![CI](https://github.com/DanNixon/yuugi/actions/workflows/ci.yml/badge.svg)](https://github.com/DanNixon/yuugi/actions/workflows/ci.yml)
+# yuugi [![CI](https://github.com/DanNixon/yuugi/actions/workflows/ci.yml/badge.svg)](https://github.com/DanNixon/yuugi/actions/workflows/ci.yml) [![dependency status](https://deps.rs/repo/github/dannixon/yuugi/status.svg)](https://deps.rs/repo/github/dannixon/yuugi)
 
 A quick, hacky proof of concept tool for monitoring power consumption of multi-component software systems.
 
