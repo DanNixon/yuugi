@@ -4,12 +4,12 @@ version = "0.0.1"
 edition = "2021"
 
 [dependencies]
-clap = { version = "3.2.20", features = ["derive", "env"] }
+clap = { version = "4.0.13", features = ["derive", "env"] }
 env_logger = "0.9.0"
 kagiyama = "0.0.3"
 log = "0.4.17"
 num_cpus = "1.13.1"
 prometheus-client = "0.18.0"
 sysconf = "0.3.4"
-sysinfo = "0.25.1"
+sysinfo = "0.26.4"
 tokio = { version = "1.20.1", features = ["macros", "rt-multi-thread"] }
