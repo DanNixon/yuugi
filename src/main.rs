@@ -46,7 +46,7 @@ struct Cli {
 }
 
 fn get_process_jiffies(pid: &Pid) -> u64 {
-    match fs::read_to_string(format!("/proc/{}/stat", pid)) {
+    match fs::read_to_string(format!("/proc/{pid}/stat")) {
         Ok(contents) => {
             let contents: Vec<&str> = contents.split(' ').collect();
             let utime: u64 = contents[13].parse().unwrap();
