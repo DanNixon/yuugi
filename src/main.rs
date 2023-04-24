@@ -1,9 +1,12 @@
 use clap::Parser;
-use kagiyama::{AlwaysReady, Watcher};
-use prometheus_client::{
-    encoding::text::Encode,
-    metrics::{counter::Counter, family::Family, info::Info},
-    registry::Unit,
+use kagiyama::{
+    prometheus as prometheus_client,
+    prometheus::{
+        encoding::EncodeLabelSet,
+        metrics::{counter::Counter, family::Family, info::Info},
+        registry::Unit,
+    },
+    AlwaysReady, Watcher,
 };
 use std::{fs, sync::atomic::Ordering};
 use sysinfo::{CpuExt, Pid, ProcessExt, System, SystemExt};
@@ -61,7 +64,7 @@ fn get_process_jiffies(pid: &Pid) -> u64 {
     }
 }
 
-#[derive(Clone, Hash, PartialEq, Eq, Encode)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq, EncodeLabelSet)]
 struct Labels {
     process_name: String,
     cmdline: String,
@@ -77,8 +80,7 @@ async fn main() {
     let mut watcher = Watcher::<AlwaysReady>::default();
     watcher
         .start_server(args.metrics_address.parse().unwrap())
-        .await
-        .unwrap();
+        .await;
 
     let mut sys = System::new_all();
     sys.refresh_all();
@@ -117,7 +119,7 @@ async fn main() {
             ),
             ("jiffy_in_seconds".to_string(), jiffy_in_seconds.to_string()),
         ]);
-        registry.register("system", "Host OS information", Box::new(system));
+        registry.register("system", "Host OS information", system);
 
         let cpu = Info::new(vec![
             (
@@ -141,20 +143,20 @@ async fn main() {
                 num_physical_cores.to_string(),
             ),
         ]);
-        registry.register("cpu", "Host CPU information", Box::new(cpu));
+        registry.register("cpu", "Host CPU information", cpu);
 
         registry.register_with_unit(
             "cpu_time",
             "Total CPU time spent executing process",
             Unit::Seconds,
-            Box::new(cpu_time.clone()),
+            cpu_time.clone(),
         );
 
         registry.register_with_unit(
             "energy",
             "Total energy time spent executing process",
             Unit::Other("watt_hours".to_string()),
-            Box::new(energy.clone()),
+            energy.clone(),
         );
     }
 
